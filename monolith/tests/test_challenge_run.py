@@ -25,12 +25,11 @@ def test_challenge_run(client, db_instance):
             run.average_speed = 0
             run.elapsed_time = 1
             run.distance = 1
+        if i == '1' or i == '2':
+            db_instance.session.add(run)
+        else
+            runs.append(run)
 
-        runs.append(run)
-
-    #inserting only the first 2 to the database
-    db_instance.session.add(runs[0])
-    db_instance.session.add(runs[1])
     db_instance.session.commit()
 
     # route back to index page
