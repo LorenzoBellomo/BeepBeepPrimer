@@ -24,7 +24,6 @@ class User(db.Model):
     is_admin = db.Column(db.Boolean, default=False)
     is_anonymous = False
 
-
     def __init__(self, *args, **kw):
         super(User, self).__init__(*args, **kw)
         self._authenticated = False
@@ -62,6 +61,7 @@ class Run(db.Model):
     runner = relationship('User', foreign_keys='Run.runner_id', backref=backref('Run', cascade="all,delete"))
 
 
+
 class Objectives(db.Model):
     __tablename__ = 'user_objectives'
     distance = db.Column(db.Float)
@@ -74,6 +74,14 @@ class Objectives(db.Model):
     def set_distance(self, distance):
         self.distance = distance
 
+class Challenge(db.Model):
+    __tablename__ = 'challenge'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    runner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    runner = relationship('User', foreign_keys='Challenge.runner_id', backref=backref('Challenge', cascade="all,delete"))
+    run_id = db.Column(db.Integer, db.ForeignKey('run.id'))
+    run = relationship('Run', foreign_keys='Challenge.run_id', backref=backref('Challenge', cascade="all,delete"))
+    latest_run_id = db.Column(db.Integer)
 
 def _delete_user(user):
     # delete cascade
@@ -85,3 +93,4 @@ def _setObjective(user, distance):
     new_objective.distance = distance
     new_objective.user = user
     db.session.add(new_objective)
+

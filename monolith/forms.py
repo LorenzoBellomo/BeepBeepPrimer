@@ -32,3 +32,6 @@ class ComparisonsForm(FlaskForm):
     
 class ObjectiveForm(FlaskForm):
     distance = f.FloatField('distance')
+
+class ChallengeForm(FlaskForm):
+    runs = f.SelectMultipleField('runs')

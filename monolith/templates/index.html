@@ -17,10 +17,17 @@
         {% else %}
         <h2>Your last 10 runs</h2>
         <form action="/comparisons" method="post">
-          {% for run in runs%}
+          {% for run in runs %}
           <div>
+            <div class="runs">
             <input type="checkbox" name="runs" value="{{run.id}}">
-            <a href="/runs/{{run.id}}">{{run.name}}</a>
+              <!--coloring the fetched runs checking their id in the lists-->
+              <a href="/runs/{{run.id}}" {% if run.id in challenged_run %} style="color:yellow"
+                                       {% elif run.id in challenge_green %} style="color:green"
+                                       {% elif run.id in challenge_red %} style="color:red"                                       
+                                       {% elif run.id in challenge_orange %} style="color:orangered"
+                                       {% endif %}> {{run.name}} </a>
+            </div>
           </div>
           {% endfor %}
           <br />
@@ -29,7 +36,14 @@
             {{comparisonError}}
           </p>
           {% endif %}
+          <!--to display in case of an error while challenging-->
+          {% if challengeError %}
+          <p style="color: red">
+            {{challengeError}}
+          </p>
+          {% endif %}
           <input type="submit" value="Compare" />
+          <input type="submit" formaction="/challenge" value="Challenge"/>
         </form>
         <button onclick="location.href='/objective'" type="button">Set Objective</button>
       </div>
@@ -60,6 +74,18 @@
       <p>Percentage: <span id="perc">{{ '%0.2f'| format(percentage)}}</span> %</p>
     </div>
   </div>
+  <div class="content-section-b">
+    <div class="container">
+      <h2>Challenge</h2>
+      {% if challenged_run %} Challenge Open! <br> {% else %} No Challenge <br> {% endif %}
+      Any new run happened after the moment you created the challenge will appear: <br>
+      <ul>
+        <li> yellow if it is the challenged run </li>
+        <li> green if it is better than the challenged one </li>
+        <li> red if it is worse than the challenged one </li>
+        <li> orange if they are not comparable </li>
+      </ul> 
+    </div>
   </div>
 
   {% else %}
