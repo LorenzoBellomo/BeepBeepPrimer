@@ -18,6 +18,6 @@ def test_create_user(client, db_instance):
         follow_redirects=True
     )
 
-    r = db_instance.session.query(User)
+    user = db_instance.session.query(User).filter(User.email == 'example@test.com').first()
 
-    assert r.first().email == 'example@test.com'
+    assert user.email == 'example@test.com'
