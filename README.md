@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/LorenzoBellomo/BeepBeepPrimer.svg?branch=master)](https://travis-ci.org/LorenzoBellomo/BeepBeepPrimer)
+
 BeepBeep Skeleton
 ==================
 
