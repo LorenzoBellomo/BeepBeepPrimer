@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/LorenzoBellomo/BeepBeepPrimer.svg?branch=master)](https://travis-ci.org/LorenzoBellomo/BeepBeepPrimer)
+[![Coverage Status](https://coveralls.io/repos/github/LorenzoBellomo/BeepBeepPrimer/badge.svg?branch=master)](https://coveralls.io/github/LorenzoBellomo/BeepBeepPrimer?branch=master)
 
 BeepBeep Skeleton
 ==================
