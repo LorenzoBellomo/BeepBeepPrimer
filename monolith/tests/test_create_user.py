@@ -1,25 +1,23 @@
-import unittest
+from monolith.database import User
 
-from monolith.app import create_app
-from monolith.database import db, User, _delete_user
-import random
+def test_create_user(client, db_instance):
 
+    client.post(
+        '/create_user',
+        data=dict(
+            email='example@test.com',
+            firstname='Jhon',
+            lastname='Doe',
+            password='password',
+            age='22',
+            weight='75',
+            max_hr='150',
+            rest_hr='60',
+            vo2max='10'
+        ),
+        follow_redirects=True
+    )
 
-class TestApp(unittest.TestCase):
+    r = db_instance.session.query(User)
 
-    def test_create_user(self):
-        app = create_app()
-
-        email = 'mock' + str(random.randint(1, 101)) + '@mock.com'
-        password = 'mock'
-        example = User()
-        example.email = email
-        example.set_password(password)
-
-        with app.app_context():
-            db.session.add(example)
-            db.session.commit()
-
-            user = db.session.query(User).filter(User.email == email).first()
-            self.assertEqual(user, example)
-            _delete_user(user)
+    assert r.first().email == 'example@test.com'

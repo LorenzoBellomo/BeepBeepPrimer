@@ -1,66 +1,69 @@
-import unittest
+from monolith.database import User, Run, Objectives
 
-from monolith.app import create_app
-from monolith.database import db, User, Run, Objectives, _delete_user
-import random
 
-class TestApp(unittest.TestCase):
+def test_delete_user(client, db_instance):
+    email = 'delete@test.com'
+    password = 'password'
 
-    def test_delete_user1(self):
-        app = create_app()
+    client.post(
+        '/create_user',
+        data=dict(
+            email=email,
+            firstname='Jhon',
+            lastname='Doe',
+            password=password,
+            age='22',
+            weight='75',
+            max_hr='150',
+            rest_hr='60',
+            vo2max='10'
+        ),
+        follow_redirects=True
+    )
 
-        # creating mock user
-        email = 'mock' + str(random.randint(1, 101)) + '@mock.com'
-        password = 'mock'
-        example = User()
-        example.email = email
-        example.set_password(password)
+    user = db_instance.session.query(User).filter(User.email == email).first()
+    user_id = user.get_id()
 
-        with app.app_context():
-            db.session.add(example)
-            db.session.commit()
+    runs_id = ['1', '2', '3']
 
-            _delete_user(example)
-            user = db.session.query(User).filter(User.email == email).first()
-            self.assertEqual(user, None)
+    objective = Objectives()
+    objective.distance = 1000
+    objective.user = user
 
-    def test_delete_user2(self):
-        app = create_app()
+    for id in runs_id:
+        run = Run()
+        run.runner = user
+        run.strava_id = id
+        run.distance = 1500
+        run.average_speed = 10
+        run.elapsed_time = 200000
+        db_instance.session.add(run)
 
-        # creating mock user
-        email = 'mock' + str(random.randint(1, 101)) + '@mock.com'
-        password = 'mock'
-        example = User()
-        example.email = email
-        example.set_password(password)
+    db_instance.session.add(objective)
+    db_instance.session.commit()
 
-        runs_id =['1', '2', '3']
+    client.post(
+        '/login',
+        data=dict(
+            email=email,
+            password=password
+        ),
+        follow_redirects=True
+    )
 
-        objective = Objectives()
-        objective.distance = 1000
-        objective.user = example
+    client.post(
+        '/delete_user',
+        data=dict(
+            password=password
+        ),
+        follow_redirects=True
+    )
 
-        with app.app_context():
-            db.session.add(example)
+    user = db_instance.session.query(User).filter(User.email == email).first()
+    assert user is None
 
-            for id in runs_id:
-                run = Run()
-                run.runner = example
-                run.strava_id = id
-                db.session.add(run)
+    run = db_instance.session.query(Run).filter(Run.runner_id == user_id).first()
+    assert run is None
 
-            db.session.add(objective)
-
-            db.session.commit()
-            user_id = example.get_id()
-
-            _delete_user(example)
-            user = db.session.query(User).filter(User.email == email).first()
-            self.assertEqual(user, None)
-
-            run = db.session.query(Run).filter(Run.runner_id == user_id).first()
-            self.assertEqual(run, None)
-
-            objective = db.session.query(Objectives).filter(Objectives.user_id == user_id).first()
-            self.assertEqual(objective, None)
-
+    objective = db_instance.session.query(Objectives).filter(Objectives.user_id == user_id).first()
+    assert objective is None

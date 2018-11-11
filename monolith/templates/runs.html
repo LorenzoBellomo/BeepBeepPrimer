@@ -3,36 +3,36 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='landing-page.css') }}">
 <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet"
   type="text/css">
-
-<html>
-
 <body>
   {% include 'header.html' %}
   <div class="intro-header">
     <div class="container">
       <h1>Info about Run</h1>
-      <table>
-        <tbody>
-          <tr>
-            <td>Name</td>
-            <td>{{ run.name }}</td>
-          </tr>
-          <tr>
-            <td>Speed</td>
-            <td>{{ run.average_speed }}</td>
-          </tr>
-          <tr>
-            <td>Distance</td>
-            <td>{{ run.distance }}</td>
-          </tr>
-        </tbody>
-      </table>
-      {% if run.id > 1 %}
-      <button onclick="location.href='/runs/{{ run.id-1 }}'" type="button">Previous</button>
+      {% if current_user.is_authenticated %}
+        {% if run %}
+          <table>
+            <tbody>
+              <tr>
+                <td>Name</td><td>{{ run.name }}</td>
+              </tr>
+              <tr>
+                <td>Speed</td><td>{{ run.average_speed }}</td>
+              </tr>
+              <tr>
+                <td>Distance</td><td>{{ run.distance }}</td>
+              </tr>
+            </tbody>
+          </table>
+          {% if prev_run %}
+          <button onclick="location.href='/runs/{{ prev_run.id }}'" type="button">Previous</button>
+          {% endif %}
+        {% else %}
+          <h4 class="text-danger">!!! Run not found...</h4>
+        {% endif %}
+        <button onclick="location.href='/'" type="button">Go home</button>
+      {% else %}
+        Hi Anonymous, <a href="/login">Log in</a>
       {% endif %}
-      <button onclick="location.href='/'" type="button">Go Back</button>
     </div>
   </div>
 </body>
-
-</html>
