@@ -51,7 +51,7 @@ def test_challenge_run(client, db_instance):
 
     db_instance.session.commit()
 
-    toCompare = db_instance.session.query(Run).filter(current_user.id == Run.runner_id, Run.id > challenged.latest_run_id).all()
+    toCompare = db_instance.session.query(Run).filter(user.id == Run.runner_id, Run.id > challenged.latest_run_id).all()
     assert len(toCompare) == 3
     for run in toCompare:
         better = 0
