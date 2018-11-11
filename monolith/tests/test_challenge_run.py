@@ -22,7 +22,7 @@ def test_challenge_run(client, db_instance):
     # generate some runs
     runs = []
     for i in ['1', '2', '3', '4', '5']:
-        # creating 5 incrementally better runs, except for the one with id 4 which is bad
+        # creating 5 incrementally better runs, except for the fourth one which is bad
         run = Run()
 
         run.runner = user
