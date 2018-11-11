@@ -46,5 +46,35 @@ def test_challenge_run(client, db_instance):
     assert challenged
     assert challenged.run_id == 1
     db_instance.session.add(runs[2])
+    db_instance.session.add(runs[3])
+    db_instance.session.add(runs[4])
+
     db_instance.session.commit()
+
+    toCompare = db_instance.session.query(Run).filter(current_user.id == Run.runner_id, Run.id > challenged.latest_run_id).all()
+    assert len(toCompare) == 3
+    for run in toCompare:
+        better = 0
+        worse = 0
+        if run.average_speed > challenged.run.average_speed and run.distance > challenged.run.distance:
+            better += 1
+        else:
+            worse += 1
+            assert run.id == 4
+
+    assert better == 2
+    assert worse == 1
+
+    res = client.post(
+        '/challenge',
+        data={
+            'runs': ['1']
+        },
+        follow_redirects=True
+    )
+
+    challenged = db.session.query(Challenge).filter(user.id == Run.runner_id).first()
+    assert not challenged
+
+
     
