@@ -15,7 +15,7 @@
         {% if not current_user.strava_token %}
         <a href="{{strava_auth_url}}">Authorize Strava Access</a>
         {% else %}
-        <h2>Your last 10 runs</h2>
+        <h2>Your last 10 runs</h2> <!-- TODO: insert real number of runs -->
         <form action="/comparisons" method="post">
           {% for run in runs%}
           <div>
@@ -23,6 +23,7 @@
             <a href="/runs/{{run.id}}">{{run.name}}</a>
           </div>
           {% endfor %}
+          <!-- TODO: Insert button for change "page" of runs (js with hidden) -->
           <br />
           {% if comparisonError %}
           <p style="color: red">

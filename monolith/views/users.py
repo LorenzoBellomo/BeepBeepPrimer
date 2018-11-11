@@ -4,6 +4,8 @@ from monolith.auth import admin_required
 from monolith.forms import UserForm, DeleteForm
 from flask_login import current_user, logout_user
 
+from monolith.background import add_task_report
+
 
 users = Blueprint('users', __name__)
 
@@ -12,7 +14,6 @@ users = Blueprint('users', __name__)
 def _users():
     users = db.session.query(User)
     return render_template("users.html", users=users)
-
 
 @users.route('/create_user', methods=['GET', 'POST'])
 def create_user():
@@ -50,3 +51,8 @@ def delete_user():
             return redirect('/users')
 
     return render_template('delete_user.html', form=form, user_email=email)
+
+@users.route('/setting_user', methods=['GET'])
+def setting_user():
+    add_task_report(current_user.email)
+    return render_template('setting_user.html')

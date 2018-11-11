@@ -1,0 +1,28 @@
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='bootstrap.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='bootstrap.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='landing-page.css') }}">
+<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet"
+  type="text/css">
+
+<body>
+  {% include 'header.html' %}
+
+  <div class="intro-header">
+    <div class="container">
+      <h1>Settings</h1>
+
+      {% if current_user.is_authenticated %}
+
+      <h2>Report by Email</h2>
+        <!-- inserire i settings -->
+
+      <br />
+      <button onclick="location.href='/'" type="button">Go Back</button>
+
+
+      {% else %}
+        Hi Anonymous, <a href="/login">Log in</a>
+      {% endif %}
+    </div>
+  </div>
+</body>

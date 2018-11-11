@@ -43,7 +43,7 @@ def create_testing_app():
     app.config['STRAVA_CLIENT_SECRET'] = os.environ['STRAVA_CLIENT_SECRET']
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///testdb.db'
     app.config['WTF_CSRF_ENABLED'] = False # to mock rest services
-    
+
     for bp in blueprints:
         app.register_blueprint(bp)
         bp.app = app
@@ -56,5 +56,5 @@ def create_testing_app():
 
 if __name__ == '__main__':
     app = create_app()
-    # app.run(debug=True)
-    app.run()
+    app.run(debug=True)
+    # app.run()

@@ -6,3 +6,4 @@ flask-wtf
 flask-sqlalchemy
 stravalib==0.9
 pyquery
+smtplib
