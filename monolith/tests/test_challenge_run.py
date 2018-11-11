@@ -20,9 +20,11 @@ def test_challenge_run(client, db_instance):
         if i != '4':
             run.average_speed = float(i)
             run.elapsed_time = float(i)*1000
+            run.distance = 25
         else:
             run.average_speed = 0
             run.elapsed_time = 1
+            run.distance = 1
 
         runs.append(run)
 
@@ -42,7 +44,7 @@ def test_challenge_run(client, db_instance):
 
     challenged = db.session.query(Challenge).filter(user.id == Run.runner_id).first()
     assert challenged
-    assert challenged.run_id = 1
+    assert challenged.run_id == 1
     db_instance.session.add(runs[2])
     db_instance.session.commit()
     
