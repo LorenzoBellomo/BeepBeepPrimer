@@ -30,7 +30,7 @@ def index():
     objective_distance = 0
     tot_distance = 0
     elapsed_time = 0
-    progress = 0
+    remaining_KM = 0
     minutes = 0
     sec = 0
 
@@ -54,7 +54,7 @@ def index():
     strava_auth_url = _strava_auth_url(home.app.config)
 
     if objective_distance - tot_distance > 0:
-        progress = objective_distance - tot_distance
+        remaining_KM = objective_distance - tot_distance
         percentage = (tot_distance/objective_distance)*100
     else:
         percentage = 100
@@ -68,28 +68,6 @@ def index():
         comparisonError = comparisonError,
         objective_distance = m2km(objective_distance),
         tot_distance = m2km(tot_distance),
-        progress = m2km(progress),
+        remaining_KM = m2km(remaining_KM),
         percentage = percentage
     )
-
-
-@home.route('/objective', methods=['GET', 'POST'])
-def set_objective():
-    form = ObjectiveForm()
-
-    if form.validate_on_submit():
-        objective_distance = km2m(form.data['distance'])
-        q = db.session.query(User).filter(User.email == current_user.email)
-        user = q.first()
-
-        existing_objective = db.session.query(Objectives).filter(Objectives.user == user).first()
-        if existing_objective is None:
-            _setObjective(user, objective_distance)
-
-        else:
-            existing_objective.set_distance(objective_distance)
-
-        db.session.commit()
-        return redirect("/")
-
-    return render_template('set_objective.html', form = form)

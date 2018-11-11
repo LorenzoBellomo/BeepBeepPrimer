@@ -19,7 +19,6 @@ def db_instance(app):
     with app.app_context():
         yield db
 
-
 @pytest.fixture
 def client(app):
     client = app.test_client()

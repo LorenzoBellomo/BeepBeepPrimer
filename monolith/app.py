@@ -12,6 +12,7 @@ def create_app():
     app.config['STRAVA_CLIENT_ID'] = os.environ['STRAVA_CLIENT_ID']
     app.config['STRAVA_CLIENT_SECRET'] = os.environ['STRAVA_CLIENT_SECRET']
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///beepbeep.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     for bp in blueprints:
         app.register_blueprint(bp)
@@ -42,7 +43,9 @@ def create_testing_app():
     app.config['STRAVA_CLIENT_ID'] = os.environ['STRAVA_CLIENT_ID']
     app.config['STRAVA_CLIENT_SECRET'] = os.environ['STRAVA_CLIENT_SECRET']
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///testdb.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['WTF_CSRF_ENABLED'] = False # to mock rest services
+    app.config['TESTING'] = True
     
     for bp in blueprints:
         app.register_blueprint(bp)

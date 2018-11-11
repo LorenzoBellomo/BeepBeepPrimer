@@ -34,6 +34,9 @@ def test_delete_user(client, db_instance):
         run = Run()
         run.runner = user
         run.strava_id = id
+        run.distance = 1500
+        run.average_speed = 10
+        run.elapsed_time = 200000
         db_instance.session.add(run)
 
     db_instance.session.add(objective)
