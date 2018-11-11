@@ -19,8 +19,7 @@ def ensure_logged_in(client, db_instance):
         follow_redirects=True
     )
 
-    user = db_instance.session.query(User).filter(
-        User.email == 'example@test.com').first()
+    user = db_instance.session.query(User).filter(User.email == 'example@test.com').first()
 
     return user
 

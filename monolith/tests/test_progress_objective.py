@@ -39,7 +39,6 @@ def test_objective(client, db_instance):
 
 
     #Testing remaining kilometers in "PROGRESS" field
-    user = db_instance.session.query(User).first()
     _setObjective(user, 30000)
     res = client.get("/")
     html=pq(res.data)
